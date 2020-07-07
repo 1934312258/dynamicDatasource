@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JQuery模板</title>
+    <style>
+        #app ul{margin-top: 10px;background: #eee;}
+    </style>
+</head>
+<body>
+
+<!--定义vuejs管理渲染的范围-->
+<div id="app">
+
+</div>
+
+<!-- 第一步：导入vue.js文件 -->
+<script src="js/jquery-1.12.4.min.js"></script>
+<script>
+
+    $(function () {
+        //初始化在这里
+        var userData = [{
+            id: 1,
+            username: "徐柯老师",
+            age: 33,
+            male: 1,
+            address: "广州广东",
+            tel: "15074816437"
+        },{
+            id: 2,
+            username: "张三老师",
+            age: 28,
+            male: 1,
+            address: "广州广东",
+            tel: "18923442345"
+        },{
+            id: 2,
+            username: "女神老师",
+            age: 12,
+            male: 0,
+            address: "广州广东",
+            tel: "17074816437"
+        }];
+
+
+        var html = "";
+        for(var i=0;i<userData.length;i++){
+            html +="<ul>"
+            var user = userData[i];
+            for(var key in user){
+                html +="<li>"+key+"=="+user[key]+"</li>"
+            }
+            html +="</ul>";
+        }
+
+        $("#app").html(html);
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itbooking.mapper.read.UserReadDao">
+
+    <!--auto generated Code-->
+    <resultMap id="AllColumnMap" type="com.itbooking.pojo.User">
+        <result column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="all_column">
+        id,
+        username,
+        password,
+        name
+    </sql>
+
+    <!--auto generated Code-->
+    <select id="select" resultMap="AllColumnMap">
+        SELECT
+        <include refid="all_column"/>
+        FROM user
+        <where>
+            <if test="pojo.id != null">AND id = #{pojo.id}</if>
+            <if test="pojo.username != null">AND username = #{pojo.username}</if>
+            <if test="pojo.password != null">AND password = #{pojo.password}</if>
+            <if test="pojo.name != null">AND name = #{pojo.name}</if>
+        </where>
+        LIMIT 1000
+    </select>
+
+    <select id="findAll" resultMap="AllColumnMap">
+        SELECT
+        <include refid="all_column"/>
+        FROM user limit 0,10
+    </select>
+
+    <select id="findById" parameterType="long" resultMap="AllColumnMap">
+        SELECT
+        <include refid="all_column"/>
+        FROM user WHERE id = #{id}
+    </select>
+
+</mapper>

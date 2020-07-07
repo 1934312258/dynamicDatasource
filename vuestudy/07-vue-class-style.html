@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>07-vue-class-style.html</title>
+    <style>
+        .ctitle{color:red;}
+        .active{background:#eee;padding:20px;margin-top:10px;}
+        .text-danger{font-weight: bold}
+    </style>
+</head>
+<body>
+
+    <!--定义vuejs管理渲染的范围-->
+    <div id="app">
+
+        <!-- 字符串的方式 -->
+        <div class="ctitle" v-bind:class="'active'">{{title}}</div>
+        <!-- 对象的方式 -->
+        <div class="ctitle" v-bind:class="{'active':isActive}">{{title}}</div>
+        <!-- 多个值和对象方式 -->
+        <div class="ctitle" v-bind:class="{'active':isActive,'text-danger': hasError}">{{title}}</div>
+
+        <!-- 数组的方式 -->
+        <div class="ctitle" v-bind:class="[activeClass,errorClass]">{{title}}</div>
+        <!-- 支持三目运算-->
+        <div class="ctitle" v-bind:class="[isActive?activeClass:'',errorClass]">{{title}}</div>
+    </div>
+
+    <!-- 第二步：导入vue.js文件 -->
+    <script src="js/vuejs-2.5.16.js"></script>
+    <script>
+
+          // 第三步：定义vuejs对象，开始进行视图和数据的渲染
+          var app = new Vue({
+              el:"#app",
+              data:{
+                  title:"Hello world!",
+                  activeClass: 'active',
+                  errorClass: 'text-danger',
+                  hasError:true,
+                  isActive:true  //我来控制样式是否加或者不加
+              }
+          }) ;
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+    <!--第一步：定义vuejs管理渲染的范围-->
+    <div id="app">
+        <p>请输入年龄：<input type="text" v-model="age"/></p>
+        <p v-if="age>0 && age<=7"><strong>儿童</strong></p>
+        <p v-else-if="age>7 && age<=16"><strong>青少年</strong></p>
+        <p v-else-if="age>16 && age<=25"><strong>青年</strong></p>
+        <p v-else-if="age>25 && age<=50"><strong>成年</strong></p>
+        <p v-else-if="age>50 && age<=65"><strong>中年人</strong></p>
+        <p v-else><strong>老年人</strong></p>
+    </div>
+
+    <!-- 第二步：导入vue.js文件 -->
+    <script src="js/vuejs-2.5.16.js"></script>
+    <script>
+
+          // 第三步：定义vuejs对象，开始进行视图和数据的渲染
+          var app = new Vue({
+              el:"#app",
+              data:{age:18},
+          }) ;
+
+    </script>
+</body>
+</html>

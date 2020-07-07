@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>v-if与v-show</title>
+    <script src="js/vuejs-2.5.16.js"></script>
+</head>
+<body>
+<div id="app">
+    <input type="text" v-model="flag">
+    <span>
+        <span v-if="flag < 1">我是大帅哥1</span>
+        <span v-else-if="flag >= 1 && flag < 4">我是大帅哥2</span>
+        <span v-else-if="flag >= 4 && flag <10">我是大帅哥3</span>
+        <span v-else>我是普通人</span>
+    </span>
+</div>
+<script>
+    new Vue({
+        el : '#app', //表示当前vue对象接管了div区域
+        data : {
+            flag : 1
+        }
+    });
+</script>
+</body>
+</html>

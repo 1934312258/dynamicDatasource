@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itbooking.mapper.UserDao">
+
+<!--auto generated Code-->
+    <resultMap id="AllColumnMap" type="com.itbooking.pojo.User">
+        <result column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+    </resultMap>
+
+<!--auto generated Code-->
+    <sql id="all_column">
+        id,
+        username,
+        password,
+        name
+    </sql>
+
+<!--auto generated Code-->
+    <insert id="insert">
+        INSERT INTO user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.id != null"> id, </if>
+            <if test="pojo.username != null"> username, </if>
+            <if test="pojo.password != null"> password, </if>
+            <if test="pojo.name != null"> name, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.id != null"> #{pojo.id}, </if>
+            <if test="pojo.username != null"> #{pojo.username}, </if>
+            <if test="pojo.password != null"> #{pojo.password}, </if>
+            <if test="pojo.name != null"> #{pojo.name}, </if>
+        </trim>
+    </insert>
+
+<!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO user(
+        <include refid="all_column"/>
+        )VALUES
+        <foreach collection="pojos" item="pojo" index="index" separator=",">
+            (
+            #{pojo.id},
+            #{pojo.username},
+            #{pojo.password},
+            #{pojo.name}
+            )
+        </foreach>
+    </insert>
+
+<!--auto generated Code-->
+    <update id="update">
+        UPDATE user
+        <set>
+            <if test="pojo.id != null"> id = #{pojo.id}, </if>
+            <if test="pojo.username != null"> username = #{pojo.username}, </if>
+            <if test="pojo.password != null"> password = #{pojo.password}, </if>
+            <if test="pojo.name != null"> name = #{pojo.name} </if>
+        </set>
+         WHERE id = #{pojo.id}
+    </update>
+
+<!--auto generated Code-->
+    <select id="select" resultMap="AllColumnMap">
+        SELECT <include refid="all_column"/>
+        FROM user
+        <where>
+            <if test="pojo.id != null"> AND id = #{pojo.id} </if>
+            <if test="pojo.username != null"> AND username = #{pojo.username} </if>
+            <if test="pojo.password != null"> AND password = #{pojo.password} </if>
+            <if test="pojo.name != null"> AND name = #{pojo.name} </if>
+        </where>
+        LIMIT 1000 
+    </select>
+
+    <select id="findAll" resultMap="AllColumnMap">
+        SELECT
+          <include refid="all_column"/>
+        FROM user limit 0,10
+    </select>
+
+    <select id="findById" parameterType="long" resultMap="AllColumnMap">
+        SELECT
+        <include refid="all_column"/>
+        FROM user WHERE id = #{id}
+    </select>
+
+
+    <!--auto generated Code-->
+    <delete id="deleteById">
+        DELETE FROM user where id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>07-vue-class-style.html</title>
+    <style>
+        .ctitle{background:#eee;
+            padding: 20px;}
+    </style>
+</head>
+<body>
+
+    <!--定义vuejs管理渲染的范围-->
+    <div id="app">
+        <!-- 对象的方式 -->
+        <div class="ctitle" v-bind:style="{'color':activeColor,'fontSize':fontSize+'px'}">{{title}}</div>
+        <!-- 数组的方式 -->
+        <div v-bind:style="[baseStyles, overridingStyles]">{{title}}</div>
+    </div>
+
+    <!-- 第二步：导入vue.js文件 -->
+    <script src="js/vuejs-2.5.16.js"></script>
+    <script>
+
+          // 第三步：定义vuejs对象，开始进行视图和数据的渲染
+          var app = new Vue({
+              el:"#app",
+              data:{
+                  baseStyles:{
+                    fontSize:"30px",
+                    color:"green"
+                  },
+                  overridingStyles:{
+                    background:"#eee",
+                    marginTop:"10px",
+                    padding:"20px"
+                  },
+                  title:"Hello world!",
+                  activeColor: 'red',
+                  fontSize: 30
+              }
+          }) ;
+
+    </script>
+</body>
+</html>

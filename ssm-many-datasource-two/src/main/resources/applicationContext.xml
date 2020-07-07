@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+    <!--扫包 service-->
+    <context:component-scan base-package="com.itbooking.service"/>
+
+    <!--配置属性配置-->
+    <context:property-placeholder location="classpath:jdbc.properties"></context:property-placeholder>
+
+
+    <bean id="abstractDataSource" abstract="true" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="60000"/>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+        <property name="validationQuery" value="SELECT 'x'"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+        <property name="poolPreparedStatements" value="true"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="20"/>
+        <property name="filters" value="config"/>
+    </bean>
+
+    <bean id="dataSourceRead" parent="abstractDataSource">
+        <!-- 基本属性 url、user、password -->
+        <property name="url" value="${jdbc.read.url}"/>
+        <property name="username" value="${jdbc.read.username}"/>
+        <property name="password" value="${jdbc.read.password}"/>
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="5"/>
+        <property name="minIdle" value="10"/>
+        <property name="maxActive" value="20"/>
+    </bean>
+
+    <bean id="dataSourceRead2" parent="abstractDataSource">
+        <!-- 基本属性 url、user、password -->
+        <property name="url" value="${jdbc.read2.url}"/>
+        <property name="username" value="${jdbc.read2.username}"/>
+        <property name="password" value="${jdbc.read2.password}"/>
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="5"/>
+        <property name="minIdle" value="10"/>
+        <property name="maxActive" value="20"/>
+    </bean>
+
+    <bean id="dataSourceWrite" parent="abstractDataSource">
+        <!-- 基本属性 url、user、password -->
+        <property name="url" value="${jdbc.write.url}"/>
+        <property name="username" value="${jdbc.write.username}"/>
+        <property name="password" value="${jdbc.write.password}"/>
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="5"/>
+        <property name="minIdle" value="10"/>
+        <property name="maxActive" value="20"/>
+    </bean>
+
+
+    <!-- 数据源的路由选择-->
+    <bean id="dataSource" class="com.itbooking.core.DynamicDataSource">
+        <property name="writeDataSource" ref="dataSourceWrite" />
+        <property name="readDataSources">
+            <list>
+                <ref bean="dataSourceRead" />
+                <ref bean="dataSourceRead2" />
+            </list>
+        </property>
+        <!--轮询方式-->
+        <property name="readDataSourcePollPattern" value="1" />
+        <property name="defaultTargetDataSource" ref="dataSourceWrite"/>
+    </bean>
+
+    <!-- 针对myBatis的配置项 -->
+    <!-- 配置sqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 实例化sqlSessionFactory时需要使用上述配置好的数据源以及SQL映射文件 -->
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations" value="classpath:mappers/*.xml"/>
+    </bean>
+
+    <!-- 配置扫描器 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 扫描包以及它的子包下的所有映射接口类 -->
+        <property name="basePackage" value="com.itbooking.mapper"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+    <!-- 配置数据库注解aop -->
+    <bean id="dynamicDataSourceAspect" class="com.itbooking.core.DynamicDataSourceAspect" />
+    <aop:config>
+        <aop:aspect id="c" ref="dynamicDataSourceAspect">
+            <aop:pointcut id="tx" expression="execution(* com.itbooking.service.*.*(..))"/>
+            <aop:before pointcut-ref="tx" method="before"/>
+            <aop:after pointcut-ref="tx" method="after"/>
+        </aop:aspect>
+    </aop:config>
+
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 配置数据源 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+</beans>

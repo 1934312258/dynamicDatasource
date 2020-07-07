@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>v-on 事件修饰符</title>
+</head>
+<body>
+<div id="app">
+    <form @submit.prevent action="http://www.itcast.cn" method="get">
+        <input type="submit" value="提交" />
+    </form>
+    <div @click="fun1($event)">
+        <a @click.stop.prevent="fun2" href="http://www.itcast.cn">itcast</a>
+    </div>
+</div>
+<script src="js/vuejs-2.5.16.js"></script>
+<script>
+    new Vue({
+        el : '#app', //表示当前vue对象接管了div区域
+        methods : {
+            fun1 : function(e) {
+                console.log(e)
+                console.log("hello div");
+            },
+            fun2:function(){
+                console.log("a hello ")
+            }
+        }
+    });
+</script>
+</body>
+</html>

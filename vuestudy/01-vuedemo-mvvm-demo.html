@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>01-vuedemo-mvvm-demo.html</title>
+    <style>
+        #app ul{marign-top:10px;background:#eee;}
+    </style>
+</head>
+<body>
+
+    <!--定义vuejs管理渲染的范围-->
+    <div id="app">
+        <ul v-for="(user,index) in userData">
+            <li v-for="(key,value) in user">{{key}}:{{value}}</li>
+        </ul>
+    </div>
+
+    <!-- 第二步：导入vue.js文件 -->
+    <script src="js/vuejs-2.5.16.js"></script>    
+    <script>
+
+        var userData = [{
+            id: 1,
+            username: "徐柯老师",
+            age: 33,
+            male: 1,
+            address: "广州广东",
+            tel: "15074816437"
+        },{
+            id: 2,
+            username: "张三老师",
+            age: 28,
+            male: 1,
+            address: "广州广东",
+            tel: "18923442345"
+        },{
+            id: 2,
+            username: "女神老师",
+            age: 12,
+            male: 0,
+            address: "广州广东",
+            tel: "17074816437"
+        }];
+
+          // 第三步：定义vuejs对象，开始进行视图和数据的渲染
+        var app = new Vue({
+            el:"#app",
+            data:{userData:userData}
+        }) ;
+
+    </script>
+</body>
+</html>
